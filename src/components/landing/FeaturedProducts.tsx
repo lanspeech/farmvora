@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { ShoppingBag, ArrowRight } from 'lucide-react';
+import { Egg, ArrowRight } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -48,13 +48,14 @@ export function FeaturedProducts({ onVisitStore }: FeaturedProductsProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <div className="flex justify-center mb-4">
-            <ShoppingBag className="w-12 h-12 text-orange-600" />
+            <Egg className="w-12 h-12 text-green-600" />
           </div>
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Fresh from Our Farms
+            Fresh From Our Community Farms
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Shop premium quality produce directly from our verified farms. From fresh eggs to frozen poultry, we deliver farm-to-table goodness.
+            Affordable, farm-fresh eggs and poultry products produced sustainably
+            within local communities. No middlemen, no inflated prices.
           </p>
         </div>
 
@@ -72,13 +73,10 @@ export function FeaturedProducts({ onVisitStore }: FeaturedProductsProps) {
                 <h3 className="text-lg font-bold text-gray-900 mb-2">{product.name}</h3>
                 <p className="text-sm text-gray-600 mb-3 line-clamp-2">{product.description}</p>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-orange-600">
-                    ${product.price_usd.toFixed(2)}
+                  <span className="text-2xl font-bold text-green-600">
+                    ₦{product.price_ngn.toLocaleString()}
                   </span>
                   <span className="text-sm text-gray-500">/ {product.unit}</span>
-                </div>
-                <div className="text-xs text-gray-500 mt-1">
-                  ₦{product.price_ngn.toLocaleString()} / {product.unit}
                 </div>
               </div>
             </div>
@@ -88,7 +86,7 @@ export function FeaturedProducts({ onVisitStore }: FeaturedProductsProps) {
         <div className="text-center">
           <button
             onClick={onVisitStore}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-lg font-semibold"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-lg font-semibold"
           >
             View All Products
             <ArrowRight className="w-5 h-5" />

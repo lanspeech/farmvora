@@ -1,14 +1,13 @@
-import { Sprout, LogIn, UserPlus, LogOut, LayoutDashboard, User, Heart, Shield, ShoppingBag } from 'lucide-react';
+import { Egg, LogIn, UserPlus, LogOut, User, Shield, ShoppingBag } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { NotificationDropdown } from './NotificationDropdown';
 
 interface NavbarProps {
-  onNavigate: (page: string, projectId?: string) => void;
+  onNavigate: (page: string) => void;
   currentPage: string;
 }
 
 export function Navbar({ onNavigate, currentPage }: NavbarProps) {
-  const { user, profile, isAdmin, signOut } = useAuth();
+  const { user, isAdmin, signOut } = useAuth();
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -18,31 +17,24 @@ export function Navbar({ onNavigate, currentPage }: NavbarProps) {
             onClick={() => onNavigate('home')}
             className="flex items-center gap-2 text-xl font-bold text-green-600 hover:text-green-700 transition-colors"
           >
-            <Sprout className="w-8 h-8" />
+            <Egg className="w-8 h-8" />
             FarmVora
           </button>
 
           <div className="flex items-center gap-6">
+            <button
+              onClick={() => onNavigate('store')}
+              className={`flex items-center gap-2 text-gray-700 hover:text-green-600 transition-colors ${
+                currentPage === 'store' ? 'text-green-600 font-semibold' : ''
+              }`}
+            >
+              <ShoppingBag className="w-4 h-4" />
+              Store
+            </button>
+
             {user ? (
               <>
-                <button
-                  onClick={() => onNavigate('projects')}
-                  className={`text-gray-700 hover:text-green-600 transition-colors ${
-                    currentPage === 'projects' ? 'text-green-600 font-semibold' : ''
-                  }`}
-                >
-                  Projects
-                </button>
-                <button
-                  onClick={() => onNavigate('store')}
-                  className={`flex items-center gap-2 text-gray-700 hover:text-orange-600 transition-colors ${
-                    currentPage === 'store' ? 'text-orange-600 font-semibold' : ''
-                  }`}
-                >
-                  <ShoppingBag className="w-4 h-4" />
-                  Store
-                </button>
-                {isAdmin ? (
+                {isAdmin && (
                   <button
                     onClick={() => onNavigate('admin')}
                     className={`flex items-center gap-2 text-gray-700 hover:text-green-600 transition-colors ${
@@ -52,28 +44,6 @@ export function Navbar({ onNavigate, currentPage }: NavbarProps) {
                     <Shield className="w-4 h-4" />
                     Admin Panel
                   </button>
-                ) : (
-                  <>
-                    <button
-                      onClick={() => onNavigate('dashboard')}
-                      className={`flex items-center gap-2 text-gray-700 hover:text-green-600 transition-colors ${
-                        currentPage === 'dashboard' ? 'text-green-600 font-semibold' : ''
-                      }`}
-                    >
-                      <LayoutDashboard className="w-4 h-4" />
-                      Dashboard
-                    </button>
-                    <button
-                      onClick={() => onNavigate('favorites')}
-                      className={`flex items-center gap-2 text-gray-700 hover:text-green-600 transition-colors ${
-                        currentPage === 'favorites' ? 'text-green-600 font-semibold' : ''
-                      }`}
-                    >
-                      <Heart className="w-4 h-4" />
-                      Watchlist
-                    </button>
-                    <NotificationDropdown onNavigate={onNavigate} />
-                  </>
                 )}
                 <button
                   onClick={() => onNavigate('profile')}
@@ -94,23 +64,6 @@ export function Navbar({ onNavigate, currentPage }: NavbarProps) {
               </>
             ) : (
               <>
-                <button
-                  onClick={() => onNavigate('projects')}
-                  className={`text-gray-700 hover:text-green-600 transition-colors ${
-                    currentPage === 'projects' ? 'text-green-600 font-semibold' : ''
-                  }`}
-                >
-                  Projects
-                </button>
-                <button
-                  onClick={() => onNavigate('store')}
-                  className={`flex items-center gap-2 text-gray-700 hover:text-orange-600 transition-colors ${
-                    currentPage === 'store' ? 'text-orange-600 font-semibold' : ''
-                  }`}
-                >
-                  <ShoppingBag className="w-4 h-4" />
-                  Store
-                </button>
                 <button
                   onClick={() => onNavigate('login')}
                   className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-green-600 transition-colors"

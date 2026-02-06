@@ -11,33 +11,17 @@ import { Stats } from './components/landing/Stats';
 import { CallToAction } from './components/landing/CallToAction';
 import { LoginForm } from './components/auth/LoginForm';
 import { SignupForm } from './components/auth/SignupForm';
-import { ProjectsPage } from './pages/ProjectsPage';
-import { ProjectDetailPage } from './pages/ProjectDetailPage';
-import { InvestorDashboard } from './pages/InvestorDashboard';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { ProfilePage } from './pages/ProfilePage';
-import { FavoritesPage } from './pages/FavoritesPage';
 import { StorePage } from './pages/StorePage';
 import { CartPage } from './pages/CartPage';
 
 function AppContent() {
-  const { user, profile, isAdmin, loading } = useAuth();
+  const { user, isAdmin, loading } = useAuth();
   const [currentPage, setCurrentPage] = useState('home');
-  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
 
-  const handleNavigate = (page: string, projectId?: string) => {
-    if (projectId) {
-      setSelectedProjectId(projectId);
-      setCurrentPage('project-detail');
-    } else {
-      setCurrentPage(page);
-      setSelectedProjectId(null);
-    }
-  };
-
-  const handleViewProject = (projectId: string) => {
-    setSelectedProjectId(projectId);
-    setCurrentPage('project-detail');
+  const handleNavigate = (page: string) => {
+    setCurrentPage(page);
   };
 
   if (loading) {
@@ -59,8 +43,7 @@ function AppContent() {
         {currentPage === 'home' && (
           <>
             <Hero
-              onGetStarted={() => handleNavigate(user ? 'projects' : 'signup')}
-              onBrowseProjects={() => handleNavigate('projects')}
+              onGetStarted={() => handleNavigate('store')}
               onVisitStore={() => handleNavigate('store')}
             />
             <FeaturedProducts onVisitStore={() => handleNavigate('store')} />
@@ -68,7 +51,7 @@ function AppContent() {
             <WhyChooseUs />
             <HowItWorks />
             <AboutUs />
-            <CallToAction onGetStarted={() => handleNavigate(user ? 'projects' : 'signup')} />
+            <CallToAction onGetStarted={() => handleNavigate('store')} />
           </>
         )}
 
@@ -86,7 +69,7 @@ function AppContent() {
               <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Welcome Back</h2>
               <LoginForm
                 onToggleForm={() => handleNavigate('signup')}
-                onSuccess={() => handleNavigate('projects')}
+                onSuccess={() => handleNavigate('store')}
               />
             </div>
           </div>
@@ -98,26 +81,10 @@ function AppContent() {
               <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Create Account</h2>
               <SignupForm
                 onToggleForm={() => handleNavigate('login')}
-                onSuccess={() => handleNavigate('projects')}
+                onSuccess={() => handleNavigate('store')}
               />
             </div>
           </div>
-        )}
-
-        {currentPage === 'projects' && (
-          <ProjectsPage onViewProject={handleViewProject} />
-        )}
-
-        {currentPage === 'project-detail' && selectedProjectId && (
-          <ProjectDetailPage
-            projectId={selectedProjectId}
-            onBack={() => handleNavigate('projects')}
-            onShowAuth={(tab) => handleNavigate(tab)}
-          />
-        )}
-
-        {currentPage === 'dashboard' && user && (
-          <InvestorDashboard onViewProject={handleViewProject} />
         )}
 
         {currentPage === 'admin' && user && isAdmin && (
@@ -126,10 +93,6 @@ function AppContent() {
 
         {currentPage === 'profile' && user && (
           <ProfilePage />
-        )}
-
-        {currentPage === 'favorites' && user && (
-          <FavoritesPage onViewProject={handleViewProject} />
         )}
       </main>
 

@@ -1,4 +1,4 @@
-import { ArrowRight, Sprout } from 'lucide-react';
+import { ArrowRight, Egg } from 'lucide-react';
 
 interface CallToActionProps {
   onGetStarted: () => void;
@@ -10,17 +10,17 @@ export function CallToAction({ onGetStarted }: CallToActionProps) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-            <Sprout className="w-8 h-8 text-white" />
+            <Egg className="w-8 h-8 text-white" />
           </div>
         </div>
 
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-          Ready to Grow Your Wealth?
+          Affordable Eggs for Your Family
         </h2>
 
         <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
-          Join thousands of investors who are earning returns while supporting sustainable agriculture
-          across Africa. Start investing today with as little as $100.
+          Join thousands of Nigerian families who are getting fresh, affordable eggs delivered from
+          community farms. Every purchase helps fight child malnutrition.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -28,7 +28,7 @@ export function CallToAction({ onGetStarted }: CallToActionProps) {
             onClick={onGetStarted}
             className="px-8 py-4 bg-white text-green-700 rounded-lg hover:bg-green-50 transition-colors text-lg font-semibold flex items-center justify-center gap-2 shadow-lg"
           >
-            Get Started Now
+            Shop Now
             <ArrowRight className="w-5 h-5" />
           </button>
 
@@ -41,7 +41,7 @@ export function CallToAction({ onGetStarted }: CallToActionProps) {
         </div>
 
         <p className="text-green-100 mt-8 text-sm">
-          No credit card required • Free account • Get started in 60 seconds
+          Free delivery within community zones -- Fresh from farm to your table
         </p>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
-import { ShoppingCart, Search, Filter, Plus, Check, Eye } from 'lucide-react';
+import { ShoppingCart, Search, Filter, Plus, Eye } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -127,8 +127,6 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
   const handleViewCart = () => {
     if (onNavigate) {
       onNavigate('cart');
-    } else {
-      window.location.href = '/cart';
     }
   };
 
@@ -168,12 +166,12 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">Farm Store</h1>
-            <p className="text-gray-600">Fresh produce directly from our farms</p>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">FarmVora Store</h1>
+            <p className="text-gray-600">Affordable eggs and poultry, straight from our community farms</p>
           </div>
           {user && (
-            <a
-              href="/cart"
+            <button
+              onClick={handleViewCart}
               className="flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold relative"
             >
               <ShoppingCart className="w-5 h-5" />
@@ -183,7 +181,7 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
                   {cartCount}
                 </span>
               )}
-            </a>
+            </button>
           )}
         </div>
 
@@ -245,13 +243,9 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
 
                     <div className="flex items-baseline gap-2 mb-3">
                       <span className="text-2xl font-bold text-green-600">
-                        ${product.price_usd.toFixed(2)}
+                        ₦{product.price_ngn.toLocaleString()}
                       </span>
                       <span className="text-sm text-gray-500">/ {product.unit}</span>
-                    </div>
-
-                    <div className="text-xs text-gray-500 mb-3">
-                      ₦{product.price_ngn.toLocaleString()} / {product.unit}
                     </div>
 
                     <div className="flex items-center justify-between mb-3">

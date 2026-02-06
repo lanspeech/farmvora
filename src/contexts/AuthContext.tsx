@@ -8,6 +8,7 @@ interface Profile {
   full_name: string;
   role: string;
   country: string | null;
+  created_at: string;
 }
 
 interface AuthContextType {
@@ -84,7 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signUp = async (email: string, password: string, fullName: string, country: string, userType: string = 'digital_farmer') => {
+  const signUp = async (email: string, password: string, fullName: string, country: string) => {
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -101,8 +102,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             email,
             full_name: fullName,
             country,
-            role: 'investor',
-            user_type: userType,
+            role: 'customer',
           });
 
         if (profileError) return { error: profileError };

@@ -1,4 +1,4 @@
-import { Sprout, Mail, MapPin } from 'lucide-react';
+import { Egg, Mail, MapPin } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -7,20 +7,21 @@ export function Footer() {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <Sprout className="w-8 h-8 text-green-500" />
+              <Egg className="w-8 h-8 text-green-500" />
               <span className="text-xl font-bold">FarmVora</span>
             </div>
             <p className="text-gray-400 text-sm">
-              Connecting diaspora investors with verified agricultural projects across Africa.
+              Affordable eggs from community farms. Fighting malnutrition through sustainable,
+              waste-to-feed-to-eggs production.
             </p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">Platform</h3>
+            <h3 className="font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">Browse Projects</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Our Store</a></li>
               <li><a href="#" className="hover:text-white transition-colors">How It Works</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Success Stories</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
             </ul>
           </div>
 
@@ -28,7 +29,7 @@ export function Footer() {
             <h3 className="font-semibold mb-4">Support</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Safety & Trust</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Delivery Info</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
             </ul>
           </div>
@@ -42,14 +43,14 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
-                <span>Pan-African Platform</span>
+                <span>Lagos, Nigeria</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; 2025 FarmVora. All rights reserved. Empowering African agriculture through transparent investment.</p>
+          <p>&copy; 2025 FarmVora. All rights reserved. Nourishing Nigerian communities through sustainable egg production.</p>
         </div>
       </div>
     </footer>

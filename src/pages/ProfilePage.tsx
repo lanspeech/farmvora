@@ -1,17 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import { User, Mail, Globe, Calendar, Edit2, Save, X, TrendingUp, DollarSign } from 'lucide-react';
+import { User, Mail, Globe, Calendar, Edit2, Save, X, ShoppingBag } from 'lucide-react';
 
 export function ProfilePage() {
   const { user, profile, refreshProfile } = useAuth();
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState({
-    totalInvested: 0,
-    activeInvestments: 0,
-    expectedReturns: 0,
-  });
+  const [orderCount, setOrderCount] = useState(0);
 
   const [formData, setFormData] = useState({
     full_name: '',
@@ -24,32 +20,23 @@ export function ProfilePage() {
         full_name: profile.full_name,
         country: profile.country || '',
       });
-      loadStats();
+      loadOrderCount();
     }
   }, [profile]);
 
-  const loadStats = async () => {
+  const loadOrderCount = async () => {
     if (!user) return;
 
     try {
-      const { data: investments, error } = await supabase
-        .from('investments')
-        .select('amount, expected_return, status')
-        .eq('investor_id', user.id);
+      const { count, error } = await supabase
+        .from('orders')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user.id);
 
       if (error) throw error;
-
-      const totalInvested = investments?.reduce((sum, inv) => sum + inv.amount, 0) || 0;
-      const expectedReturns = investments?.reduce((sum, inv) => sum + inv.expected_return, 0) || 0;
-      const activeInvestments = investments?.filter(inv => inv.status === 'active').length || 0;
-
-      setStats({
-        totalInvested,
-        activeInvestments,
-        expectedReturns,
-      });
+      setOrderCount(count || 0);
     } catch (error) {
-      console.error('Error loading stats:', error);
+      console.error('Error loading order count:', error);
     }
   };
 
@@ -159,13 +146,13 @@ export function ProfilePage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Country
+                    Location
                   </label>
                   <input
                     type="text"
                     value={formData.country}
                     onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                    placeholder="e.g., Kenya, Nigeria, Ghana"
+                    placeholder="e.g., Lagos, Abuja, Kano"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                 </div>
@@ -175,7 +162,7 @@ export function ProfilePage() {
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900 mb-2">{profile.full_name}</h1>
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
-                    {profile.role === 'admin' ? 'Administrator' : 'Investor'}
+                    {profile.role === 'admin' ? 'Administrator' : 'Customer'}
                   </span>
                 </div>
 
@@ -196,7 +183,7 @@ export function ProfilePage() {
                         <Globe className="w-5 h-5 text-gray-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Country</p>
+                        <p className="text-sm text-gray-500">Location</p>
                         <p className="font-medium text-gray-900">{profile.country}</p>
                       </div>
                     </div>
@@ -216,52 +203,21 @@ export function ProfilePage() {
                       </p>
                     </div>
                   </div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <ShoppingBag className="w-5 h-5 text-gray-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500">Total Orders</p>
+                      <p className="font-medium text-gray-900">{orderCount}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
           </div>
         </div>
-
-        {profile.role !== 'admin' && (
-          <div className="mt-6 bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Investment Summary</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-blue-50 p-6 rounded-lg">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <DollarSign className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <span className="text-sm text-gray-600">Total Invested</span>
-                </div>
-                <div className="text-3xl font-bold text-gray-900">
-                  ${stats.totalInvested.toLocaleString()}
-                </div>
-              </div>
-
-              <div className="bg-green-50 p-6 rounded-lg">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                    <TrendingUp className="w-5 h-5 text-green-600" />
-                  </div>
-                  <span className="text-sm text-gray-600">Expected Returns</span>
-                </div>
-                <div className="text-3xl font-bold text-gray-900">
-                  ${stats.expectedReturns.toLocaleString()}
-                </div>
-              </div>
-
-              <div className="bg-purple-50 p-6 rounded-lg">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <TrendingUp className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <span className="text-sm text-gray-600">Active Investments</span>
-                </div>
-                <div className="text-3xl font-bold text-gray-900">{stats.activeInvestments}</div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
