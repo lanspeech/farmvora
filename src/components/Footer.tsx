@@ -1,6 +1,15 @@
-import { Egg, Mail, MapPin } from 'lucide-react';
+import { Egg, Mail, MapPin, Phone } from 'lucide-react';
 
-export function Footer() {
+interface FooterProps {
+  onNavigate: (page: string) => void;
+}
+
+export function Footer({ onNavigate }: FooterProps) {
+  const handleNav = (page: string) => {
+    onNavigate(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -19,18 +28,47 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">Our Store</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">How It Works</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
+              <li>
+                <button onClick={() => handleNav('store')} className="hover:text-white transition-colors">
+                  Our Store
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNav('our-story')} className="hover:text-white transition-colors">
+                  Our Story
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNav('our-farms')} className="hover:text-white transition-colors">
+                  Our Farms
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNav('impact')} className="hover:text-white transition-colors">
+                  Our Impact
+                </button>
+              </li>
             </ul>
           </div>
 
           <div>
             <h3 className="font-semibold mb-4">Support</h3>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Delivery Info</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+              <li>
+                <button onClick={() => handleNav('contact')} className="hover:text-white transition-colors">
+                  Contact Us
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNav('contact')} className="hover:text-white transition-colors">
+                  Bulk Orders
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNav('contact')} className="hover:text-white transition-colors">
+                  Partnerships
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -38,11 +76,15 @@ export function Footer() {
             <h3 className="font-semibold mb-4">Contact</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li className="flex items-center gap-2">
-                <Mail className="w-4 h-4" />
+                <Mail className="w-4 h-4 flex-shrink-0" />
                 <span>info@farmvora.com</span>
               </li>
               <li className="flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
+                <Phone className="w-4 h-4 flex-shrink-0" />
+                <span>+234 801 234 5678</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 flex-shrink-0" />
                 <span>Lagos, Nigeria</span>
               </li>
             </ul>

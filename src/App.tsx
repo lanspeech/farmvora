@@ -15,6 +15,10 @@ import { AdminDashboard } from './pages/AdminDashboard';
 import { ProfilePage } from './pages/ProfilePage';
 import { StorePage } from './pages/StorePage';
 import { CartPage } from './pages/CartPage';
+import { OurStoryPage } from './pages/OurStoryPage';
+import { OurFarmsPage } from './pages/OurFarmsPage';
+import { ImpactPage } from './pages/ImpactPage';
+import { ContactPage } from './pages/ContactPage';
 
 function AppContent() {
   const { user, isAdmin, loading } = useAuth();
@@ -63,6 +67,22 @@ function AppContent() {
           <CartPage onNavigate={handleNavigate} />
         )}
 
+        {currentPage === 'our-story' && (
+          <OurStoryPage onNavigate={handleNavigate} />
+        )}
+
+        {currentPage === 'our-farms' && (
+          <OurFarmsPage onNavigate={handleNavigate} />
+        )}
+
+        {currentPage === 'impact' && (
+          <ImpactPage onNavigate={handleNavigate} />
+        )}
+
+        {currentPage === 'contact' && (
+          <ContactPage onNavigate={handleNavigate} />
+        )}
+
         {currentPage === 'login' && (
           <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 sm:py-12 px-4">
             <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-8">
@@ -96,7 +116,7 @@ function AppContent() {
         )}
       </main>
 
-      <Footer />
+      <Footer onNavigate={handleNavigate} />
     </div>
   );
 }
