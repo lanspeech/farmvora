@@ -146,11 +146,11 @@ export function ProductManagement() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">Product Management</h2>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Product Management</h2>
         <button
           onClick={() => setCreating(true)}
-          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"
+          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2 text-sm sm:text-base"
         >
           <Plus className="w-4 h-4" />
           Add Product
@@ -158,9 +158,9 @@ export function ProductManagement() {
       </div>
 
       {creating && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Create New Product</h3>
-          <div className="grid grid-cols-2 gap-4">
+        <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Create New Product</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
               <input
@@ -186,7 +186,7 @@ export function ProductManagement() {
               </select>
             </div>
 
-            <div className="col-span-2">
+            <div className="sm:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
               <textarea
                 rows={3}
@@ -239,7 +239,7 @@ export function ProductManagement() {
               />
             </div>
 
-            <div className="col-span-2">
+            <div className="sm:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
               <input
                 type="text"
@@ -250,7 +250,7 @@ export function ProductManagement() {
               />
             </div>
 
-            <div className="col-span-2">
+            <div className="sm:col-span-2">
               <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -300,8 +300,8 @@ export function ProductManagement() {
                 <tr key={product.id} className="hover:bg-gray-50">
                   {editing === product.id ? (
                     <>
-                      <td className="px-6 py-4" colSpan={6}>
-                        <div className="grid grid-cols-2 gap-4">
+                      <td className="px-4 sm:px-6 py-4" colSpan={6}>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
                             <input
@@ -383,7 +383,7 @@ export function ProductManagement() {
                               <span className="text-sm font-medium text-gray-700">Available</span>
                             </label>
                           </div>
-                          <div className="col-span-2 flex gap-3">
+                          <div className="sm:col-span-2 flex gap-3">
                             <button
                               onClick={() => handleUpdate(product.id)}
                               className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"

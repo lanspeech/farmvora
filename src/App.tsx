@@ -64,9 +64,9 @@ function AppContent() {
         )}
 
         {currentPage === 'login' && (
-          <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
-            <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Welcome Back</h2>
+          <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 sm:py-12 px-4">
+            <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-8">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Welcome Back</h2>
               <LoginForm
                 onToggleForm={() => handleNavigate('signup')}
                 onSuccess={() => handleNavigate('store')}
@@ -76,9 +76,9 @@ function AppContent() {
         )}
 
         {currentPage === 'signup' && (
-          <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
-            <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Create Account</h2>
+          <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 sm:py-12 px-4">
+            <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-8">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Create Account</h2>
               <SignupForm
                 onToggleForm={() => handleNavigate('login')}
                 onSuccess={() => handleNavigate('store')}

@@ -269,7 +269,7 @@ export function CartPage({ onNavigate }: CartPageProps) {
           Continue Shopping
         </button>
 
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">Shopping Cart</h1>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-8">Shopping Cart</h1>
 
         {cartItems.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
@@ -284,39 +284,44 @@ export function CartPage({ onNavigate }: CartPageProps) {
             </button>
           </div>
         ) : (
-          <div className="grid lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-4">
+          <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="lg:col-span-2 space-y-3 sm:space-y-4">
               {cartItems.map(item => (
-                <div key={item.id} className="bg-white rounded-xl border border-gray-200 p-6">
-                  <div className="flex gap-4">
+                <div key={item.id} className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
+                  <div className="flex gap-3 sm:gap-4">
                     <img
                       src={item.product.image_url}
                       alt={item.product.name}
-                      className="w-24 h-24 object-cover rounded-lg"
+                      className="w-16 h-16 sm:w-24 sm:h-24 object-cover rounded-lg flex-shrink-0"
                     />
 
-                    <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 mb-1">{item.product.name}</h3>
-                      <div className="text-sm text-gray-600 mb-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-start gap-2">
+                        <h3 className="text-sm sm:text-lg font-bold text-gray-900 mb-1 truncate">{item.product.name}</h3>
+                        <div className="text-sm sm:text-lg font-bold text-gray-900 flex-shrink-0">
+                          ₦{(item.product.price_ngn * item.quantity).toLocaleString()}
+                        </div>
+                      </div>
+                      <div className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3">
                         <div>₦{item.product.price_ngn.toLocaleString()} / {item.product.unit}</div>
                       </div>
 
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <div className="flex items-center gap-1 sm:gap-2">
                           <button
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
                             disabled={updating === item.id || item.quantity <= 1}
                             className="p-1 rounded-lg border border-gray-300 hover:bg-gray-100 disabled:opacity-50"
                           >
-                            <Minus className="w-4 h-4" />
+                            <Minus className="w-3 h-3 sm:w-4 sm:h-4" />
                           </button>
-                          <span className="font-semibold text-gray-900 w-8 text-center">{item.quantity}</span>
+                          <span className="font-semibold text-gray-900 w-6 sm:w-8 text-center text-sm sm:text-base">{item.quantity}</span>
                           <button
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
                             disabled={updating === item.id || item.quantity >= item.product.stock_quantity}
                             className="p-1 rounded-lg border border-gray-300 hover:bg-gray-100 disabled:opacity-50"
                           >
-                            <Plus className="w-4 h-4" />
+                            <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
                           </button>
                         </div>
 
@@ -329,19 +334,13 @@ export function CartPage({ onNavigate }: CartPageProps) {
                         </button>
                       </div>
                     </div>
-
-                    <div className="text-right">
-                      <div className="text-lg font-bold text-gray-900">
-                        ₦{(item.product.price_ngn * item.quantity).toLocaleString()}
-                      </div>
-                    </div>
                   </div>
                 </div>
               ))}
             </div>
 
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-xl border border-gray-200 p-6 sticky top-8 space-y-6">
+              <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 sticky top-20 space-y-4 sm:space-y-6">
                 <h2 className="text-xl font-bold text-gray-900">Order Summary</h2>
 
                 <div className="space-y-3 pb-6 border-b border-gray-200">

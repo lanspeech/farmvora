@@ -90,15 +90,15 @@ export function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-6 sm:py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="h-32 bg-gradient-to-r from-green-400 to-green-600" />
+          <div className="h-24 sm:h-32 bg-gradient-to-r from-green-400 to-green-600" />
 
-          <div className="px-8 pb-8">
-            <div className="flex items-end justify-between -mt-16 mb-6">
-              <div className="w-32 h-32 bg-white rounded-full border-4 border-white shadow-lg flex items-center justify-center">
-                <User className="w-16 h-16 text-green-600" />
+          <div className="px-4 sm:px-8 pb-6 sm:pb-8">
+            <div className="flex items-end justify-between -mt-12 sm:-mt-16 mb-4 sm:mb-6">
+              <div className="w-20 h-20 sm:w-32 sm:h-32 bg-white rounded-full border-4 border-white shadow-lg flex items-center justify-center">
+                <User className="w-10 h-10 sm:w-16 sm:h-16 text-green-600" />
               </div>
               {!editing ? (
                 <button
@@ -160,13 +160,13 @@ export function ProfilePage() {
             ) : (
               <div className="space-y-6">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2">{profile.full_name}</h1>
+                  <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2">{profile.full_name}</h1>
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
                     {profile.role === 'admin' ? 'Administrator' : 'Customer'}
                   </span>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
                       <Mail className="w-5 h-5 text-gray-600" />

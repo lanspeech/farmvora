@@ -225,54 +225,54 @@ export function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">FarmVora Admin Dashboard</h1>
-          <p className="text-gray-600">Manage your store, products, and customers</p>
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-1 sm:mb-2">FarmVora Admin Dashboard</h1>
+          <p className="text-sm sm:text-base text-gray-600">Manage your store, products, and customers</p>
         </div>
 
         {activeTab === 'overview' && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <Users className="w-6 h-6 text-blue-600" />
-                <h3 className="text-sm font-semibold text-gray-600">Total Customers</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+              <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                <Users className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+                <h3 className="text-xs sm:text-sm font-semibold text-gray-600">Customers</h3>
               </div>
-              <p className="text-3xl font-bold text-gray-900">{users.length}</p>
-              <p className="text-sm text-gray-600 mt-1">{activeUsers} active, {suspendedUsers} suspended</p>
+              <p className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">{users.length}</p>
+              <p className="text-xs sm:text-sm text-gray-600 mt-1">{activeUsers} active, {suspendedUsers} suspended</p>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <ShoppingBag className="w-6 h-6 text-green-600" />
-                <h3 className="text-sm font-semibold text-gray-600">Total Orders</h3>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+              <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
+                <h3 className="text-xs sm:text-sm font-semibold text-gray-600">Orders</h3>
               </div>
-              <p className="text-3xl font-bold text-gray-900">{orderCount}</p>
+              <p className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">{orderCount}</p>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <BarChart3 className="w-6 h-6 text-amber-600" />
-                <h3 className="text-sm font-semibold text-gray-600">Revenue</h3>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+              <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600" />
+                <h3 className="text-xs sm:text-sm font-semibold text-gray-600">Revenue</h3>
               </div>
-              <p className="text-3xl font-bold text-gray-900">₦{totalRevenue.toLocaleString()}</p>
+              <p className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">₦{totalRevenue.toLocaleString()}</p>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <Package className="w-6 h-6 text-teal-600" />
-                <h3 className="text-sm font-semibold text-gray-600">Products</h3>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+              <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                <Package className="w-5 h-5 sm:w-6 sm:h-6 text-teal-600" />
+                <h3 className="text-xs sm:text-sm font-semibold text-gray-600">Products</h3>
               </div>
-              <p className="text-3xl font-bold text-gray-900">{productCount}</p>
+              <p className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">{productCount}</p>
             </div>
           </div>
         )}
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-200">
           <div className="border-b border-gray-200">
-            <nav className="flex space-x-8 px-6" aria-label="Tabs">
+            <nav className="flex space-x-4 sm:space-x-8 px-4 sm:px-6 overflow-x-auto" aria-label="Tabs">
               <button
                 onClick={() => setActiveTab('overview')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
                   activeTab === 'overview'
                     ? 'border-green-600 text-green-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -282,7 +282,7 @@ export function AdminDashboard() {
               </button>
               <button
                 onClick={() => setActiveTab('users')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
                   activeTab === 'users'
                     ? 'border-green-600 text-green-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -292,7 +292,7 @@ export function AdminDashboard() {
               </button>
               <button
                 onClick={() => setActiveTab('products')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
                   activeTab === 'products'
                     ? 'border-green-600 text-green-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -303,7 +303,7 @@ export function AdminDashboard() {
             </nav>
           </div>
 
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {activeTab === 'products' && <ProductManagement />}
 
             {activeTab === 'overview' && (
@@ -344,9 +344,9 @@ export function AdminDashboard() {
 
             {activeTab === 'users' && (
               <div>
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900">Customer Management</h2>
-                  <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Customer Management</h2>
+                  <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                     <div className="relative">
                       <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
                       <input
@@ -354,7 +354,7 @@ export function AdminDashboard() {
                         placeholder="Search customers..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                       />
                     </div>
                     <select

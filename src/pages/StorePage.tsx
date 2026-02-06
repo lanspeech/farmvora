@@ -164,15 +164,15 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">FarmVora Store</h1>
-            <p className="text-gray-600">Affordable eggs and poultry, straight from our community farms</p>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-1 sm:mb-2">FarmVora Store</h1>
+            <p className="text-sm sm:text-base text-gray-600">Affordable eggs and poultry, straight from our community farms</p>
           </div>
           {user && (
             <button
               onClick={handleViewCart}
-              className="flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold relative"
+              className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold relative"
             >
               <ShoppingCart className="w-5 h-5" />
               Cart
@@ -185,7 +185,7 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
           )}
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
           <div className="flex items-center gap-2 mb-4">
             <Filter className="w-5 h-5 text-gray-600" />
             <h2 className="text-lg font-semibold text-gray-900">Search & Filter</h2>
@@ -226,10 +226,10 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
             <div className="mb-4 text-sm text-gray-600">
               Showing {filteredProducts.length} products
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
               {filteredProducts.map(product => (
                 <div key={product.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-                  <div className="h-48 bg-gray-200 overflow-hidden">
+                  <div className="h-32 sm:h-40 md:h-48 bg-gray-200 overflow-hidden">
                     <img
                       src={product.image_url || 'https://images.pexels.com/photos/1300361/pexels-photo-1300361.jpeg'}
                       alt={product.name}
@@ -237,19 +237,19 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
                     />
                   </div>
 
-                  <div className="p-4">
-                    <h3 className="text-lg font-bold text-gray-900 mb-1">{product.name}</h3>
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{product.description}</p>
+                  <div className="p-3 sm:p-4">
+                    <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1">{product.name}</h3>
+                    <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3 line-clamp-2">{product.description}</p>
 
-                    <div className="flex items-baseline gap-2 mb-3">
-                      <span className="text-2xl font-bold text-green-600">
+                    <div className="flex items-baseline gap-1 sm:gap-2 mb-2 sm:mb-3">
+                      <span className="text-lg sm:text-xl md:text-2xl font-bold text-green-600">
                         ₦{product.price_ngn.toLocaleString()}
                       </span>
-                      <span className="text-sm text-gray-500">/ {product.unit}</span>
+                      <span className="text-xs sm:text-sm text-gray-500">/ {product.unit}</span>
                     </div>
 
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm text-gray-600">
+                    <div className="flex items-center justify-between mb-2 sm:mb-3">
+                      <span className="text-xs sm:text-sm text-gray-600">
                         Stock: {product.stock_quantity} {product.unit}s
                       </span>
                       {product.stock_quantity < 10 && (
@@ -260,16 +260,16 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
                     {isInCart(product.id) ? (
                       <button
                         onClick={handleViewCart}
-                        className="w-full py-2 px-4 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 bg-blue-600 text-white hover:bg-blue-700"
+                        className="w-full py-2 px-3 sm:px-4 rounded-lg font-semibold transition-colors flex items-center justify-center gap-1 sm:gap-2 bg-blue-600 text-white hover:bg-blue-700 text-xs sm:text-sm"
                       >
-                        <Eye className="w-4 h-4" />
+                        <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
                         View Cart
                       </button>
                     ) : (
                       <button
                         onClick={() => addToCart(product)}
                         disabled={addingToCart === product.id || product.stock_quantity === 0}
-                        className="w-full py-2 px-4 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full py-2 px-3 sm:px-4 rounded-lg font-semibold transition-colors flex items-center justify-center gap-1 sm:gap-2 bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
                       >
                         {addingToCart === product.id ? (
                           <>
