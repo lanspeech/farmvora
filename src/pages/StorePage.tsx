@@ -60,8 +60,8 @@ export function StorePage() {
         .order('name');
       if (error) throw error;
       setProducts(data || []);
-    } catch (error) {
-      console.error('Error loading products:', error);
+    } catch {
+      showToast('Failed to load products. Please try again.', 'error');
     } finally {
       setLoading(false);
     }

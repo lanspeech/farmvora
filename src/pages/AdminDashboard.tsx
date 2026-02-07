@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../components/Toast';
+import { ConfirmModal } from '../components/ConfirmModal';
 import {
   Users, BarChart3, Search,
   ShoppingBag, Package
@@ -21,7 +22,7 @@ interface UserProfile {
 }
 
 export function AdminDashboard() {
-  const { user } = useAuth();
+  const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'products' | 'orders'>('overview');
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [orderCount, setOrderCount] = useState(0);
@@ -33,6 +34,10 @@ export function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'suspended'>('all');
   const [productCount, setProductCount] = useState(0);
+
+  const [suspendModal, setSuspendModal] = useState<{ open: boolean; userId: string; userName: string }>({ open: false, userId: '', userName: '' });
+  const [unsuspendModal, setUnsuspendModal] = useState<{ open: boolean; userId: string; userName: string }>({ open: false, userId: '', userName: '' });
+  const [deleteModal, setDeleteModal] = useState<{ open: boolean; userId: string; userName: string }>({ open: false, userId: '', userName: '' });
 
   const [userEditForm, setUserEditForm] = useState({
     full_name: '',
@@ -55,8 +60,7 @@ export function AdminDashboard() {
       const { data, error } = await supabase.rpc('is_admin');
       if (error) throw error;
       setIsAdmin(data);
-    } catch (error) {
-      console.error('Error checking admin status:', error);
+    } catch {
       setIsAdmin(false);
     }
   };
@@ -78,8 +82,8 @@ export function AdminDashboard() {
 
       if (error) throw error;
       setUsers(data || []);
-    } catch (error) {
-      console.error('Error loading users:', error);
+    } catch {
+      showToast('Failed to load customers', 'error');
     }
   };
 
@@ -93,8 +97,8 @@ export function AdminDashboard() {
 
       setOrderCount(orders?.length || 0);
       setTotalRevenue(orders?.reduce((sum, o) => sum + (o.total_amount || 0), 0) || 0);
-    } catch (error) {
-      console.error('Error loading order stats:', error);
+    } catch {
+      showToast('Failed to load order stats', 'error');
     }
   };
 
@@ -106,31 +110,33 @@ export function AdminDashboard() {
 
       if (error) throw error;
       setProductCount(count || 0);
-    } catch (error) {
-      console.error('Error loading product count:', error);
+    } catch {
+      showToast('Failed to load product count', 'error');
     }
   };
 
-  const handleSuspendUser = async (userId: string) => {
-    const suspendReason = prompt('Please enter reason for suspension:');
-    if (!suspendReason) return;
+  const handleSuspendUser = async (reason?: string) => {
+    if (!reason?.trim()) return;
+    const { userId } = suspendModal;
 
     try {
       const { error } = await supabase
         .from('profiles')
-        .update({ is_suspended: true, suspended_reason: suspendReason })
+        .update({ is_suspended: true, suspended_reason: reason.trim() })
         .eq('id', userId);
 
       if (error) throw error;
-      alert('User suspended successfully');
+      showToast('User suspended successfully');
+      setSuspendModal({ open: false, userId: '', userName: '' });
       loadUsers();
-    } catch (error) {
-      console.error('Error suspending user:', error);
-      alert('Failed to suspend user');
+    } catch {
+      showToast('Failed to suspend user', 'error');
     }
   };
 
-  const handleUnsuspendUser = async (userId: string) => {
+  const handleUnsuspendUser = async () => {
+    const { userId } = unsuspendModal;
+
     try {
       const { error } = await supabase
         .from('profiles')
@@ -138,27 +144,25 @@ export function AdminDashboard() {
         .eq('id', userId);
 
       if (error) throw error;
-      alert('User unsuspended successfully');
+      showToast('User unsuspended successfully');
+      setUnsuspendModal({ open: false, userId: '', userName: '' });
       loadUsers();
-    } catch (error) {
-      console.error('Error unsuspending user:', error);
-      alert('Failed to unsuspend user');
+    } catch {
+      showToast('Failed to unsuspend user', 'error');
     }
   };
 
-  const handleDeleteUser = async (userId: string) => {
-    if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
-    const confirmText = prompt('Type "DELETE" to confirm:');
-    if (confirmText !== 'DELETE') { alert('Deletion cancelled'); return; }
+  const handleDeleteUser = async () => {
+    const { userId } = deleteModal;
 
     try {
       const { error } = await supabase.from('profiles').delete().eq('id', userId);
       if (error) throw error;
-      alert('User deleted successfully');
+      showToast('User deleted successfully');
+      setDeleteModal({ open: false, userId: '', userName: '' });
       loadUsers();
-    } catch (error) {
-      console.error('Error deleting user:', error);
-      alert('Failed to delete user');
+    } catch {
+      showToast('Failed to delete user', 'error');
     }
   };
 
@@ -178,13 +182,12 @@ export function AdminDashboard() {
         .eq('id', selectedUser.id);
 
       if (error) throw error;
-      alert('User updated successfully');
+      showToast('User updated successfully');
       setShowEditUser(false);
       setSelectedUser(null);
       loadUsers();
-    } catch (error) {
-      console.error('Error updating user:', error);
-      alert('Failed to update user');
+    } catch {
+      showToast('Failed to update user', 'error');
     } finally {
       setLoading(false);
     }
@@ -255,7 +258,7 @@ export function AdminDashboard() {
                 <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600" />
                 <h3 className="text-xs sm:text-sm font-semibold text-gray-600">Revenue</h3>
               </div>
-              <p className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">₦{totalRevenue.toLocaleString()}</p>
+              <p className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">{totalRevenue.toLocaleString()}</p>
             </div>
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
@@ -442,14 +445,14 @@ export function AdminDashboard() {
                                 </button>
                                 {userProfile.is_suspended ? (
                                   <button
-                                    onClick={() => handleUnsuspendUser(userProfile.id)}
+                                    onClick={() => setUnsuspendModal({ open: true, userId: userProfile.id, userName: userProfile.full_name })}
                                     className="text-green-600 hover:text-green-700 text-sm font-semibold"
                                   >
                                     Unsuspend
                                   </button>
                                 ) : (
                                   <button
-                                    onClick={() => handleSuspendUser(userProfile.id)}
+                                    onClick={() => setSuspendModal({ open: true, userId: userProfile.id, userName: userProfile.full_name })}
                                     className="text-orange-600 hover:text-orange-700 text-sm font-semibold"
                                   >
                                     Suspend
@@ -457,7 +460,7 @@ export function AdminDashboard() {
                                 )}
                                 {userProfile.role !== 'admin' && (
                                   <button
-                                    onClick={() => handleDeleteUser(userProfile.id)}
+                                    onClick={() => setDeleteModal({ open: true, userId: userProfile.id, userName: userProfile.full_name })}
                                     className="text-red-600 hover:text-red-700 text-sm font-semibold"
                                   >
                                     Delete
@@ -525,22 +528,72 @@ export function AdminDashboard() {
                 <button
                   type="button"
                   onClick={() => { setShowEditUser(false); setSelectedUser(null); }}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                  disabled={loading}
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  {loading ? 'Updating...' : 'Update Customer'}
+                  {loading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Updating...
+                    </>
+                  ) : (
+                    'Update Customer'
+                  )}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        open={suspendModal.open}
+        onClose={() => setSuspendModal({ open: false, userId: '', userName: '' })}
+        onConfirm={handleSuspendUser}
+        title="Suspend User"
+        description={<>Are you sure you want to suspend <span className="font-semibold">{suspendModal.userName}</span>? They will not be able to access their account.</>}
+        confirmLabel="Suspend User"
+        variant="warning"
+        input={{
+          label: 'Reason for suspension',
+          placeholder: 'Enter reason for suspension...',
+          required: true,
+        }}
+      />
+
+      <ConfirmModal
+        open={unsuspendModal.open}
+        onClose={() => setUnsuspendModal({ open: false, userId: '', userName: '' })}
+        onConfirm={handleUnsuspendUser}
+        title="Unsuspend User"
+        description={<>Are you sure you want to unsuspend <span className="font-semibold">{unsuspendModal.userName}</span>? They will regain access to their account.</>}
+        confirmLabel="Unsuspend User"
+        variant="default"
+      />
+
+      <ConfirmModal
+        open={deleteModal.open}
+        onClose={() => setDeleteModal({ open: false, userId: '', userName: '' })}
+        onConfirm={handleDeleteUser}
+        title="Delete User"
+        description={<>This will permanently delete <span className="font-semibold">{deleteModal.userName}</span>. This action cannot be undone.</>}
+        confirmLabel="Delete User"
+        variant="danger"
+        input={{
+          label: 'Type "DELETE" to confirm',
+          placeholder: 'DELETE',
+          required: true,
+          matchValue: 'DELETE',
+          matchHint: 'You must type DELETE in all caps to confirm.',
+        }}
+      />
     </div>
   );
 }

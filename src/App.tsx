@@ -1,5 +1,6 @@
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './components/Toast';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { RouterProvider, useRouter } from './lib/router';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
@@ -41,51 +42,53 @@ function AppContent() {
       <Navbar />
 
       <main className="flex-1">
-        {path === '/' && (
-          <>
-            <Hero />
-            <FeaturedProducts />
-            <Stats />
-            <WhyChooseUs />
-            <HowItWorks />
-            <AboutUs />
-            <CallToAction />
-          </>
-        )}
+        <ErrorBoundary key={path}>
+          {path === '/' && (
+            <>
+              <Hero />
+              <FeaturedProducts />
+              <Stats />
+              <WhyChooseUs />
+              <HowItWorks />
+              <AboutUs />
+              <CallToAction />
+            </>
+          )}
 
-        {path === '/store' && <StorePage />}
+          {path === '/store' && <StorePage />}
 
-        {path === '/cart' && <CartPage />}
+          {path === '/cart' && <CartPage />}
 
-        {path === '/dashboard' && user && <DashboardPage />}
+          {path === '/dashboard' && user && <DashboardPage />}
 
-        {path === '/our-story' && <OurStoryPage />}
+          {path === '/our-story' && <OurStoryPage />}
 
-        {path === '/our-farms' && <OurFarmsPage />}
+          {path === '/our-farms' && <OurFarmsPage />}
 
-        {path === '/impact' && <ImpactPage />}
+          {path === '/impact' && <ImpactPage />}
 
-        {path === '/contact' && <ContactPage />}
+          {path === '/contact' && <ContactPage />}
 
-        {path === '/login' && (
-          <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 sm:py-12 px-4">
-            <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-8">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Welcome Back</h2>
-              <LoginForm />
+          {path === '/login' && (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 sm:py-12 px-4">
+              <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-8">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Welcome Back</h2>
+                <LoginForm />
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {path === '/signup' && (
-          <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 sm:py-12 px-4">
-            <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-8">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Create Account</h2>
-              <SignupForm />
+          {path === '/signup' && (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 sm:py-12 px-4">
+              <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-8">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Create Account</h2>
+                <SignupForm />
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {path === '/admin' && user && isAdmin && <AdminDashboard />}
+          {path === '/admin' && user && isAdmin && <AdminDashboard />}
+        </ErrorBoundary>
       </main>
 
       <Footer />

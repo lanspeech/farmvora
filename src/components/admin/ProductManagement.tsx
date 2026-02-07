@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
+import { useToast } from '../Toast';
+import { ConfirmModal } from '../ConfirmModal';
+import { Plus, Edit2, Trash2, Save, X, Loader2 } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -15,22 +17,27 @@ interface Product {
   is_available: boolean;
 }
 
+const defaultForm: Partial<Product> = {
+  name: '',
+  description: '',
+  category: 'eggs',
+  price_usd: 0,
+  price_ngn: 0,
+  unit: 'kg',
+  stock_quantity: 0,
+  image_url: '',
+  is_available: true,
+};
+
 export function ProductManagement() {
+  const { showToast } = useToast();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
-  const [formData, setFormData] = useState<Partial<Product>>({
-    name: '',
-    description: '',
-    category: 'eggs',
-    price_usd: 0,
-    price_ngn: 0,
-    unit: 'kg',
-    stock_quantity: 0,
-    image_url: '',
-    is_available: true,
-  });
+  const [deleteModal, setDeleteModal] = useState<{ open: boolean; productId: string; productName: string }>({ open: false, productId: '', productName: '' });
+  const [formData, setFormData] = useState<Partial<Product>>(defaultForm);
 
   useEffect(() => {
     loadProducts();
@@ -45,14 +52,15 @@ export function ProductManagement() {
 
       if (error) throw error;
       setProducts(data || []);
-    } catch (error) {
-      console.error('Error loading products:', error);
+    } catch {
+      showToast('Failed to load products', 'error');
     } finally {
       setLoading(false);
     }
   };
 
   const handleCreate = async () => {
+    setSaving(true);
     try {
       const { error } = await supabase
         .from('products')
@@ -60,27 +68,19 @@ export function ProductManagement() {
 
       if (error) throw error;
 
-      alert('Product created successfully!');
+      showToast('Product created successfully');
       setCreating(false);
-      setFormData({
-        name: '',
-        description: '',
-        category: 'eggs',
-        price_usd: 0,
-        price_ngn: 0,
-        unit: 'kg',
-        stock_quantity: 0,
-        image_url: '',
-        is_available: true,
-      });
+      setFormData(defaultForm);
       loadProducts();
-    } catch (error: any) {
-      console.error('Error creating product:', error);
-      alert(`Failed to create product: ${error.message}`);
+    } catch {
+      showToast('Failed to create product', 'error');
+    } finally {
+      setSaving(false);
     }
   };
 
   const handleUpdate = async (productId: string) => {
+    setSaving(true);
     try {
       const { error } = await supabase
         .from('products')
@@ -89,20 +89,18 @@ export function ProductManagement() {
 
       if (error) throw error;
 
-      alert('Product updated successfully!');
+      showToast('Product updated successfully');
       setEditing(null);
       loadProducts();
-    } catch (error: any) {
-      console.error('Error updating product:', error);
-      alert(`Failed to update product: ${error.message}`);
+    } catch {
+      showToast('Failed to update product', 'error');
+    } finally {
+      setSaving(false);
     }
   };
 
-  const handleDelete = async (productId: string, productName: string) => {
-    if (!confirm(`Are you sure you want to delete "${productName}"?`)) {
-      return;
-    }
-
+  const handleDelete = async () => {
+    const { productId } = deleteModal;
     try {
       const { error } = await supabase
         .from('products')
@@ -111,11 +109,11 @@ export function ProductManagement() {
 
       if (error) throw error;
 
-      alert('Product deleted successfully!');
+      showToast('Product deleted successfully');
+      setDeleteModal({ open: false, productId: '', productName: '' });
       loadProducts();
-    } catch (error: any) {
-      console.error('Error deleting product:', error);
-      alert(`Failed to delete product: ${error.message}`);
+    } catch {
+      showToast('Failed to delete product', 'error');
     }
   };
 
@@ -127,17 +125,7 @@ export function ProductManagement() {
   const cancelEdit = () => {
     setEditing(null);
     setCreating(false);
-    setFormData({
-      name: '',
-      description: '',
-      category: 'eggs',
-      price_usd: 0,
-      price_ngn: 0,
-      unit: 'kg',
-      stock_quantity: 0,
-      image_url: '',
-      is_available: true,
-    });
+    setFormData(defaultForm);
   };
 
   if (loading) {
@@ -267,14 +255,16 @@ export function ProductManagement() {
           <div className="flex gap-3 mt-6">
             <button
               onClick={handleCreate}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"
+              disabled={saving}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2 disabled:opacity-50"
             >
-              <Save className="w-4 h-4" />
-              Create Product
+              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+              {saving ? 'Creating...' : 'Create Product'}
             </button>
             <button
               onClick={cancelEdit}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 flex items-center gap-2"
+              disabled={saving}
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 flex items-center gap-2 disabled:opacity-50"
             >
               <X className="w-4 h-4" />
               Cancel
@@ -388,14 +378,16 @@ export function ProductManagement() {
                           <div className="sm:col-span-2 flex gap-3">
                             <button
                               onClick={() => handleUpdate(product.id)}
-                              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"
+                              disabled={saving}
+                              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2 disabled:opacity-50"
                             >
-                              <Save className="w-4 h-4" />
-                              Save
+                              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                              {saving ? 'Saving...' : 'Save'}
                             </button>
                             <button
                               onClick={cancelEdit}
-                              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+                              disabled={saving}
+                              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50"
                             >
                               Cancel
                             </button>
@@ -421,7 +413,7 @@ export function ProductManagement() {
                       <td className="px-6 py-4 text-sm text-gray-600 capitalize">{product.category}</td>
                       <td className="px-6 py-4 text-sm text-gray-900">
                         <div>${product.price_usd}</div>
-                        <div className="text-xs text-gray-500">₦{product.price_ngn.toLocaleString()}</div>
+                        <div className="text-xs text-gray-500">{product.price_ngn.toLocaleString()}</div>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-600">
                         {product.stock_quantity} {product.unit}
@@ -443,7 +435,7 @@ export function ProductManagement() {
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => handleDelete(product.id, product.name)}
+                            onClick={() => setDeleteModal({ open: true, productId: product.id, productName: product.name })}
                             className="p-2 text-red-600 hover:bg-red-50 rounded"
                             title="Delete"
                           >
@@ -459,6 +451,16 @@ export function ProductManagement() {
           </table>
         </div>
       </div>
+
+      <ConfirmModal
+        open={deleteModal.open}
+        onClose={() => setDeleteModal({ open: false, productId: '', productName: '' })}
+        onConfirm={handleDelete}
+        title="Delete Product"
+        description={<>Are you sure you want to delete <span className="font-semibold">"{deleteModal.productName}"</span>? This action cannot be undone.</>}
+        confirmLabel="Delete Product"
+        variant="danger"
+      />
     </div>
   );
 }
