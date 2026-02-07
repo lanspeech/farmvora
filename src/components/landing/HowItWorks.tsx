@@ -1,4 +1,4 @@
-import { Trash2, Factory, Egg, Home, ShoppingCart, CreditCard, Package } from 'lucide-react';
+import { ShoppingCart, MessageCircle, Package } from 'lucide-react';
 
 export function HowItWorks() {
   return (
@@ -14,76 +14,29 @@ export function HowItWorks() {
         <div className="mb-12 sm:mb-16 md:mb-20">
           <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6 sm:mb-8 text-center">The FarmVora Cycle</h3>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-            <div className="relative">
-              <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow h-full">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-amber-100 rounded-full flex items-center justify-center mb-3 sm:mb-4 mx-auto">
-                  <Trash2 className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600" />
-                </div>
-                <div className="text-center">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-xs sm:text-sm font-bold mb-2 sm:mb-3 mx-auto">
-                    1
+            {[
+              { step: 1, title: 'Collect Food Waste', desc: 'We source food waste locally that would otherwise end up in landfills', image: 'https://images.pexels.com/photos/3735218/pexels-photo-3735218.jpeg?auto=compress&cs=tinysrgb&w=400' },
+              { step: 2, title: 'Produce Feed', desc: 'We manufacture nutritious chicken feed using local ingredients and collected food waste', image: 'https://images.pexels.com/photos/2800832/pexels-photo-2800832.jpeg?auto=compress&cs=tinysrgb&w=400' },
+              { step: 3, title: 'Farm Fresh Eggs', desc: 'Our community farms produce fresh, affordable eggs using our low-cost feed', image: 'https://images.pexels.com/photos/1300361/pexels-photo-1300361.jpeg?auto=compress&cs=tinysrgb&w=400' },
+              { step: 4, title: 'Direct to Families', desc: 'Eggs are sold directly to families in the community, no middlemen, no inflated prices', image: 'https://images.pexels.com/photos/2252584/pexels-photo-2252584.jpeg?auto=compress&cs=tinysrgb&w=400' },
+            ].map((item) => (
+              <div key={item.step}>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow h-full overflow-hidden">
+                  <div className="h-28 sm:h-32 overflow-hidden">
+                    <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
                   </div>
-                  <h4 className="text-base sm:text-lg font-bold text-gray-900 mb-1 sm:mb-2">Collect Food Waste</h4>
-                  <p className="text-gray-600 text-xs sm:text-sm">
-                    We source food waste locally that would otherwise end up in landfills
-                  </p>
+                  <div className="p-4 sm:p-5">
+                    <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-xs sm:text-sm font-bold flex-shrink-0">
+                        {item.step}
+                      </div>
+                      <h4 className="text-sm sm:text-base font-bold text-gray-900">{item.title}</h4>
+                    </div>
+                    <p className="text-gray-600 text-xs sm:text-sm">{item.desc}</p>
+                  </div>
                 </div>
               </div>
-              <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-green-200" />
-            </div>
-
-            <div className="relative">
-              <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow h-full">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-full flex items-center justify-center mb-3 sm:mb-4 mx-auto">
-                  <Factory className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
-                </div>
-                <div className="text-center">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-xs sm:text-sm font-bold mb-2 sm:mb-3 mx-auto">
-                    2
-                  </div>
-                  <h4 className="text-base sm:text-lg font-bold text-gray-900 mb-1 sm:mb-2">Produce Feed</h4>
-                  <p className="text-gray-600 text-xs sm:text-sm">
-                    We manufacture nutritious chicken feed using local ingredients and collected food waste
-                  </p>
-                </div>
-              </div>
-              <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-green-200" />
-            </div>
-
-            <div className="relative">
-              <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow h-full">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-full flex items-center justify-center mb-3 sm:mb-4 mx-auto">
-                  <Egg className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600" />
-                </div>
-                <div className="text-center">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-xs sm:text-sm font-bold mb-2 sm:mb-3 mx-auto">
-                    3
-                  </div>
-                  <h4 className="text-base sm:text-lg font-bold text-gray-900 mb-1 sm:mb-2">Farm Fresh Eggs</h4>
-                  <p className="text-gray-600 text-xs sm:text-sm">
-                    Our community farms produce fresh, affordable eggs using our low-cost feed
-                  </p>
-                </div>
-              </div>
-              <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-green-200" />
-            </div>
-
-            <div>
-              <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow h-full">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-full flex items-center justify-center mb-3 sm:mb-4 mx-auto">
-                  <Home className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
-                </div>
-                <div className="text-center">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-xs sm:text-sm font-bold mb-2 sm:mb-3 mx-auto">
-                    4
-                  </div>
-                  <h4 className="text-base sm:text-lg font-bold text-gray-900 mb-1 sm:mb-2">Direct to Families</h4>
-                  <p className="text-gray-600 text-xs sm:text-sm">
-                    Eggs are sold directly to families in the community, no middlemen, no inflated prices
-                  </p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
@@ -106,23 +59,23 @@ export function HowItWorks() {
             </div>
 
             <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-amber-100 rounded-full flex items-center justify-center mb-3 sm:mb-4 mx-auto">
-                <CreditCard className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-full flex items-center justify-center mb-3 sm:mb-4 mx-auto">
+                <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
               </div>
               <div className="text-center">
                 <div className="w-7 h-7 sm:w-8 sm:h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-xs sm:text-sm font-bold mb-2 sm:mb-3 mx-auto">
                   2
                 </div>
-                <h4 className="text-base sm:text-lg font-bold text-gray-900 mb-1 sm:mb-2">Place Your Order</h4>
+                <h4 className="text-base sm:text-lg font-bold text-gray-900 mb-1 sm:mb-2">Order via WhatsApp</h4>
                 <p className="text-gray-600 text-xs sm:text-sm">
-                  Add to cart and checkout securely with multiple payment options
+                  Complete your order through WhatsApp for quick and easy checkout
                 </p>
               </div>
             </div>
 
             <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-full flex items-center justify-center mb-3 sm:mb-4 mx-auto">
-                <Package className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-full flex items-center justify-center mb-3 sm:mb-4 mx-auto">
+                <Package className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
               </div>
               <div className="text-center">
                 <div className="w-7 h-7 sm:w-8 sm:h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-xs sm:text-sm font-bold mb-2 sm:mb-3 mx-auto">

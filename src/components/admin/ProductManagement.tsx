@@ -23,7 +23,7 @@ export function ProductManagement() {
   const [formData, setFormData] = useState<Partial<Product>>({
     name: '',
     description: '',
-    category: 'grains',
+    category: 'eggs',
     price_usd: 0,
     price_ngn: 0,
     unit: 'kg',
@@ -65,7 +65,7 @@ export function ProductManagement() {
       setFormData({
         name: '',
         description: '',
-        category: 'grains',
+        category: 'eggs',
         price_usd: 0,
         price_ngn: 0,
         unit: 'kg',
@@ -130,7 +130,7 @@ export function ProductManagement() {
     setFormData({
       name: '',
       description: '',
-      category: 'grains',
+      category: 'eggs',
       price_usd: 0,
       price_ngn: 0,
       unit: 'kg',
@@ -178,11 +178,12 @@ export function ProductManagement() {
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
               >
-                <option value="grains">Grains</option>
-                <option value="vegetables">Vegetables</option>
-                <option value="fruits">Fruits</option>
-                <option value="livestock">Livestock</option>
-                <option value="dairy">Dairy</option>
+                <option value="eggs">Eggs</option>
+                <option value="live_chicken">Live Chickens</option>
+                <option value="frozen_chicken">Frozen Chicken</option>
+                <option value="frozen_parts">Chicken Parts</option>
+                <option value="frozen_turkey">Turkey</option>
+                <option value="frozen_duck">Duck</option>
               </select>
             </div>
 
@@ -318,11 +319,12 @@ export function ProductManagement() {
                               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                               className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                             >
-                              <option value="grains">Grains</option>
-                              <option value="vegetables">Vegetables</option>
-                              <option value="fruits">Fruits</option>
-                              <option value="livestock">Livestock</option>
-                              <option value="dairy">Dairy</option>
+                              <option value="eggs">Eggs</option>
+                              <option value="live_chicken">Live Chickens</option>
+                              <option value="frozen_chicken">Frozen Chicken</option>
+                              <option value="frozen_parts">Chicken Parts</option>
+                              <option value="frozen_turkey">Turkey</option>
+                              <option value="frozen_duck">Duck</option>
                             </select>
                           </div>
                           <div className="col-span-2">

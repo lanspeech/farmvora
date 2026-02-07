@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../components/Toast';
 import { ShoppingCart, Search, Filter, Plus, Eye } from 'lucide-react';
 
 interface Product {
@@ -27,8 +28,19 @@ interface StorePageProps {
   onNavigate?: (page: string) => void;
 }
 
+const categoryNames: Record<string, string> = {
+  all: 'All Products',
+  eggs: 'Eggs',
+  live_chicken: 'Live Chickens',
+  frozen_chicken: 'Frozen Chicken',
+  frozen_parts: 'Chicken Parts',
+  frozen_turkey: 'Turkey',
+  frozen_duck: 'Duck',
+};
+
 export function StorePage({ onNavigate }: StorePageProps = {}) {
   const { user } = useAuth();
+  const { showToast } = useToast();
   const [products, setProducts] = useState<Product[]>([]);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,9 +50,7 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
 
   useEffect(() => {
     loadProducts();
-    if (user) {
-      loadCart();
-    }
+    if (user) loadCart();
   }, [user]);
 
   const loadProducts = async () => {
@@ -50,7 +60,6 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
         .select('*')
         .eq('is_available', true)
         .order('name');
-
       if (error) throw error;
       setProducts(data || []);
     } catch (error) {
@@ -62,18 +71,11 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
 
   const loadCart = async () => {
     if (!user) return;
-
     try {
       const { data, error } = await supabase
         .from('cart_items')
-        .select(`
-          id,
-          product_id,
-          quantity,
-          product:product_id(*)
-        `)
+        .select(`id, product_id, quantity, product:product_id(*)`)
         .eq('user_id', user.id);
-
       if (error) throw error;
       setCartItems(data || []);
     } catch (error) {
@@ -83,51 +85,37 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
 
   const addToCart = async (product: Product) => {
     if (!user) {
-      alert('Please sign in to add items to cart');
+      showToast('Please sign in to add items to cart', 'warning');
       return;
     }
-
     setAddingToCart(product.id);
-
     try {
       const existingItem = cartItems.find(item => item.product_id === product.id);
-
       if (existingItem) {
         const { error } = await supabase
           .from('cart_items')
           .update({ quantity: existingItem.quantity + 1 })
           .eq('id', existingItem.id);
-
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('cart_items')
-          .insert({
-            user_id: user.id,
-            product_id: product.id,
-            quantity: 1,
-          });
-
+          .insert({ user_id: user.id, product_id: product.id, quantity: 1 });
         if (error) throw error;
       }
-
+      showToast(`${product.name} added to cart`);
       loadCart();
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-      alert('Failed to add to cart');
+    } catch {
+      showToast('Failed to add to cart', 'error');
     } finally {
       setAddingToCart(null);
     }
   };
 
-  const isInCart = (productId: string) => {
-    return cartItems.some(item => item.product_id === productId);
-  };
+  const isInCart = (productId: string) => cartItems.some(item => item.product_id === productId);
 
   const handleViewCart = () => {
-    if (onNavigate) {
-      onNavigate('cart');
-    }
+    if (onNavigate) onNavigate('cart');
   };
 
   const filteredProducts = products.filter(p => {
@@ -138,16 +126,6 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
   });
 
   const categories = ['all', ...new Set(products.map(p => p.category))];
-  const categoryNames: Record<string, string> = {
-    all: 'All Products',
-    eggs: 'Eggs',
-    live_chicken: 'Live Chickens',
-    frozen_chicken: 'Frozen Chicken',
-    frozen_parts: 'Chicken Parts',
-    frozen_turkey: 'Turkey',
-    frozen_duck: 'Duck',
-  };
-
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   if (loading) {
@@ -190,7 +168,6 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
             <Filter className="w-5 h-5 text-gray-600" />
             <h2 className="text-lg font-semibold text-gray-900">Search & Filter</h2>
           </div>
-
           <div className="grid md:grid-cols-2 gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -202,7 +179,6 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
             </div>
-
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -236,18 +212,15 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
                       className="w-full h-full object-cover"
                     />
                   </div>
-
                   <div className="p-3 sm:p-4">
                     <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1">{product.name}</h3>
                     <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3 line-clamp-2">{product.description}</p>
-
                     <div className="flex items-baseline gap-1 sm:gap-2 mb-2 sm:mb-3">
                       <span className="text-lg sm:text-xl md:text-2xl font-bold text-green-600">
                         ₦{product.price_ngn.toLocaleString()}
                       </span>
                       <span className="text-xs sm:text-sm text-gray-500">/ {product.unit}</span>
                     </div>
-
                     <div className="flex items-center justify-between mb-2 sm:mb-3">
                       <span className="text-xs sm:text-sm text-gray-600">
                         Stock: {product.stock_quantity} {product.unit}s
@@ -256,7 +229,6 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
                         <span className="text-xs text-red-600 font-semibold">Low stock!</span>
                       )}
                     </div>
-
                     {isInCart(product.id) ? (
                       <button
                         onClick={handleViewCart}

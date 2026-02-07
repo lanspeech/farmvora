@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Egg, LogIn, UserPlus, LogOut, User, Shield, ShoppingBag, Menu, X, ChevronDown, BookOpen, MapPin, TrendingUp, MessageSquare } from 'lucide-react';
+import { Egg, LogIn, UserPlus, LogOut, User, Shield, ShoppingBag, Menu, X, ChevronDown, BookOpen, MapPin, TrendingUp, MessageSquare, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 interface NavbarProps {
@@ -115,9 +115,9 @@ export function Navbar({ onNavigate, currentPage }: NavbarProps) {
                     Admin
                   </button>
                 )}
-                <button onClick={() => navigate('profile')} className={linkClass('profile')}>
-                  <User className="w-4 h-4" />
-                  Profile
+                <button onClick={() => navigate('dashboard')} className={linkClass('dashboard')}>
+                  <LayoutDashboard className="w-4 h-4" />
+                  Dashboard
                 </button>
                 <button
                   onClick={handleSignOut}
@@ -216,13 +216,13 @@ export function Navbar({ onNavigate, currentPage }: NavbarProps) {
                   </button>
                 )}
                 <button
-                  onClick={() => navigate('profile')}
+                  onClick={() => navigate('dashboard')}
                   className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg text-left transition-colors ${
-                    currentPage === 'profile' ? 'bg-green-50 text-green-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'
+                    currentPage === 'dashboard' ? 'bg-green-50 text-green-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
-                  <User className="w-5 h-5" />
-                  Profile
+                  <LayoutDashboard className="w-5 h-5" />
+                  Dashboard
                 </button>
                 <button
                   onClick={handleSignOut}

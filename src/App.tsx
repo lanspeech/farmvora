@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ToastProvider } from './components/Toast';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { Hero } from './components/landing/Hero';
@@ -12,7 +13,7 @@ import { CallToAction } from './components/landing/CallToAction';
 import { LoginForm } from './components/auth/LoginForm';
 import { SignupForm } from './components/auth/SignupForm';
 import { AdminDashboard } from './pages/AdminDashboard';
-import { ProfilePage } from './pages/ProfilePage';
+import { DashboardPage } from './pages/DashboardPage';
 import { StorePage } from './pages/StorePage';
 import { CartPage } from './pages/CartPage';
 import { OurStoryPage } from './pages/OurStoryPage';
@@ -26,6 +27,7 @@ function AppContent() {
 
   const handleNavigate = (page: string) => {
     setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   if (loading) {
@@ -67,6 +69,10 @@ function AppContent() {
           <CartPage onNavigate={handleNavigate} />
         )}
 
+        {currentPage === 'dashboard' && user && (
+          <DashboardPage onNavigate={handleNavigate} />
+        )}
+
         {currentPage === 'our-story' && (
           <OurStoryPage onNavigate={handleNavigate} />
         )}
@@ -89,7 +95,7 @@ function AppContent() {
               <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Welcome Back</h2>
               <LoginForm
                 onToggleForm={() => handleNavigate('signup')}
-                onSuccess={() => handleNavigate('store')}
+                onSuccess={() => handleNavigate('dashboard')}
               />
             </div>
           </div>
@@ -101,7 +107,7 @@ function AppContent() {
               <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Create Account</h2>
               <SignupForm
                 onToggleForm={() => handleNavigate('login')}
-                onSuccess={() => handleNavigate('store')}
+                onSuccess={() => handleNavigate('dashboard')}
               />
             </div>
           </div>
@@ -109,10 +115,6 @@ function AppContent() {
 
         {currentPage === 'admin' && user && isAdmin && (
           <AdminDashboard />
-        )}
-
-        {currentPage === 'profile' && user && (
-          <ProfilePage />
         )}
       </main>
 
@@ -124,7 +126,9 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <ToastProvider>
+        <AppContent />
+      </ToastProvider>
     </AuthProvider>
   );
 }

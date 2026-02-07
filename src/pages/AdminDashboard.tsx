@@ -6,6 +6,7 @@ import {
   ShoppingBag, Package
 } from 'lucide-react';
 import { ProductManagement } from '../components/admin/ProductManagement';
+import { OrderManagement } from '../components/admin/OrderManagement';
 
 interface UserProfile {
   id: string;
@@ -21,7 +22,7 @@ interface UserProfile {
 
 export function AdminDashboard() {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'products'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'products' | 'orders'>('overview');
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [orderCount, setOrderCount] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
@@ -300,11 +301,22 @@ export function AdminDashboard() {
               >
                 Store Products
               </button>
+              <button
+                onClick={() => setActiveTab('orders')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
+                  activeTab === 'orders'
+                    ? 'border-green-600 text-green-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Orders ({orderCount})
+              </button>
             </nav>
           </div>
 
           <div className="p-4 sm:p-6">
             {activeTab === 'products' && <ProductManagement />}
+            {activeTab === 'orders' && <OrderManagement />}
 
             {activeTab === 'overview' && (
               <div>
