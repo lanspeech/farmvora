@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { useRouter } from '../lib/router';
 import { Package, Clock, ChevronDown, ChevronUp, MapPin, Phone, ShoppingBag, User, Mail, Globe, Calendar } from 'lucide-react';
 
 interface OrderItem {
@@ -28,10 +29,6 @@ interface Order {
   order_items: OrderItem[];
 }
 
-interface DashboardPageProps {
-  onNavigate: (page: string) => void;
-}
-
 const statusColors: Record<string, string> = {
   pending: 'bg-amber-100 text-amber-700',
   confirmed: 'bg-blue-100 text-blue-700',
@@ -43,7 +40,8 @@ const statusColors: Record<string, string> = {
 
 const statusSteps = ['pending', 'confirmed', 'processing', 'shipped', 'delivered'];
 
-export function DashboardPage({ onNavigate }: DashboardPageProps) {
+export function DashboardPage() {
+  const { navigate } = useRouter();
   const { user, profile } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -83,7 +81,7 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
         <div className="text-center">
           <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Sign in to view your dashboard</h2>
-          <button onClick={() => onNavigate('login')} className="text-green-600 hover:text-green-700 font-semibold">
+          <button onClick={() => navigate('/login')} className="text-green-600 hover:text-green-700 font-semibold">
             Sign In
           </button>
         </div>
@@ -146,7 +144,7 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
             </div>
 
             <button
-              onClick={() => onNavigate('store')}
+              onClick={() => navigate('/store')}
               className="w-full mt-4 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors font-semibold flex items-center justify-center gap-2"
             >
               <ShoppingBag className="w-5 h-5" />
@@ -161,7 +159,7 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
                 <Package className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                 <h3 className="text-lg font-semibold text-gray-900 mb-1">No orders yet</h3>
                 <p className="text-gray-600 mb-4">Your order history will appear here once you place an order.</p>
-                <button onClick={() => onNavigate('store')} className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold text-sm">
+                <button onClick={() => navigate('/store')} className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold text-sm">
                   Start Shopping
                 </button>
               </div>

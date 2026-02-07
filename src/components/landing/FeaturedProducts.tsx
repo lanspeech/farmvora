@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Egg, ArrowRight } from 'lucide-react';
+import { useRouter } from '../../lib/router';
 
 interface Product {
   id: string;
@@ -12,11 +13,8 @@ interface Product {
   image_url: string;
 }
 
-interface FeaturedProductsProps {
-  onVisitStore: () => void;
-}
-
-export function FeaturedProducts({ onVisitStore }: FeaturedProductsProps) {
+export function FeaturedProducts() {
+  const { navigate } = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -74,7 +72,7 @@ export function FeaturedProducts({ onVisitStore }: FeaturedProductsProps) {
                 <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3 line-clamp-2">{product.description}</p>
                 <div className="flex items-baseline gap-1 sm:gap-2">
                   <span className="text-lg sm:text-xl md:text-2xl font-bold text-green-600">
-                    ₦{product.price_ngn.toLocaleString()}
+                    &#8358;{product.price_ngn.toLocaleString()}
                   </span>
                   <span className="text-xs sm:text-sm text-gray-500">/ {product.unit}</span>
                 </div>
@@ -85,7 +83,7 @@ export function FeaturedProducts({ onVisitStore }: FeaturedProductsProps) {
 
         <div className="text-center">
           <button
-            onClick={onVisitStore}
+            onClick={() => navigate('/store')}
             className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-base sm:text-lg font-semibold"
           >
             View All Products

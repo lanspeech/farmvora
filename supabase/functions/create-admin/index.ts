@@ -18,6 +18,40 @@ Deno.serve(async (req: Request) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader || !authHeader.includes(supabaseServiceKey)) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized: service role key required' }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    const body = await req.json();
+    const { email, password, name } = body;
+
+    if (!email || !password) {
+      return new Response(
+        JSON.stringify({ error: 'Email and password are required in the request body' }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    if (password.length < 12) {
+      return new Response(
+        JSON.stringify({ error: 'Password must be at least 12 characters' }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
     const supabase = createClient(supabaseUrl, supabaseServiceKey, {
       auth: {
         autoRefreshToken: false,
@@ -25,14 +59,13 @@ Deno.serve(async (req: Request) => {
       },
     });
 
-    // Create the admin user
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-      email: 'skalu@farmvora.com',
-      password: '123456789',
+      email,
+      password,
       email_confirm: true,
       user_metadata: {
         role: 'admin',
-        name: 'Farm Vora Admin',
+        name: name || 'FarmVora Admin',
       },
     });
 
@@ -46,7 +79,6 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Update the user's app metadata to include admin role
     const { error: updateError } = await supabase.auth.admin.updateUserById(
       authData.user.id,
       {
@@ -69,7 +101,7 @@ Deno.serve(async (req: Request) => {
         success: true,
         message: 'Admin user created successfully',
         userId: authData.user.id,
-        email: 'skalu@farmvora.com',
+        email,
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -77,7 +109,7 @@ Deno.serve(async (req: Request) => {
     );
   } catch (error) {
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: (error as Error).message }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

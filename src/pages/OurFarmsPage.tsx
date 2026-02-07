@@ -1,8 +1,5 @@
 import { MapPin, Egg, Recycle, Sun, Droplets, Users, ChevronRight, Leaf } from 'lucide-react';
-
-interface OurFarmsPageProps {
-  onNavigate: (page: string) => void;
-}
+import { useRouter } from '../lib/router';
 
 const farms = [
   {
@@ -76,7 +73,8 @@ const farmFeatures = [
   },
 ];
 
-export function OurFarmsPage({ onNavigate }: OurFarmsPageProps) {
+export function OurFarmsPage() {
+  const { navigate } = useRouter();
   return (
     <div className="min-h-screen">
       <section className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] overflow-hidden">
@@ -198,7 +196,7 @@ export function OurFarmsPage({ onNavigate }: OurFarmsPageProps) {
                   government partners are welcome.
                 </p>
                 <button
-                  onClick={() => onNavigate('contact')}
+                  onClick={() => navigate('/contact')}
                   className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold text-sm sm:text-base"
                 >
                   Contact Us

@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { TrendingUp, Users, Egg, Recycle, MapPin, Heart, Baby, GraduationCap, ArrowRight } from 'lucide-react';
-
-interface ImpactPageProps {
-  onNavigate: (page: string) => void;
-}
+import { useRouter } from '../lib/router';
 
 const impactStats = [
   { icon: Users, value: '10,000+', label: 'Families Served', description: 'Low-income households now accessing affordable eggs' },
@@ -45,7 +42,8 @@ const milestones = [
   { year: '2025', title: 'Kano & Port Harcourt', description: 'Opened farms in Northern Nigeria and the Niger Delta, bringing our total to 6 states.' },
 ];
 
-export function ImpactPage({ onNavigate }: ImpactPageProps) {
+export function ImpactPage() {
+  const { navigate } = useRouter();
   const [activeStory, setActiveStory] = useState(0);
 
   return (
@@ -263,7 +261,7 @@ export function ImpactPage({ onNavigate }: ImpactPageProps) {
             Shop with purpose.
           </p>
           <button
-            onClick={() => onNavigate('store')}
+            onClick={() => navigate('/store')}
             className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-white text-green-700 rounded-lg hover:bg-green-50 transition-colors text-base sm:text-lg font-semibold"
           >
             Shop FarmVora Eggs

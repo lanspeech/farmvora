@@ -1,10 +1,8 @@
 import { Heart, Target, Eye, Users, ArrowRight, Lightbulb, Shield, Sprout } from 'lucide-react';
+import { useRouter } from '../lib/router';
 
-interface OurStoryPageProps {
-  onNavigate: (page: string) => void;
-}
-
-export function OurStoryPage({ onNavigate }: OurStoryPageProps) {
+export function OurStoryPage() {
+  const { navigate } = useRouter();
   return (
     <div className="min-h-screen">
       <section className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] overflow-hidden">
@@ -262,14 +260,14 @@ export function OurStoryPage({ onNavigate }: OurStoryPageProps) {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <button
-              onClick={() => onNavigate('store')}
+              onClick={() => navigate('/store')}
               className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-green-700 rounded-lg hover:bg-green-50 transition-colors text-base sm:text-lg font-semibold flex items-center justify-center gap-2"
             >
               Shop Now
               <ArrowRight className="w-5 h-5" />
             </button>
             <button
-              onClick={() => onNavigate('contact')}
+              onClick={() => navigate('/contact')}
               className="px-6 sm:px-8 py-3 sm:py-4 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white/10 transition-colors text-base sm:text-lg font-semibold"
             >
               Get In Touch

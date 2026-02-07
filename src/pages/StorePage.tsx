@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../components/Toast';
+import { useRouter } from '../lib/router';
 import { ShoppingCart, Search, Filter, Plus, Eye } from 'lucide-react';
 
 interface Product {
@@ -24,10 +25,6 @@ interface CartItem {
   product: Product;
 }
 
-interface StorePageProps {
-  onNavigate?: (page: string) => void;
-}
-
 const categoryNames: Record<string, string> = {
   all: 'All Products',
   eggs: 'Eggs',
@@ -38,9 +35,10 @@ const categoryNames: Record<string, string> = {
   frozen_duck: 'Duck',
 };
 
-export function StorePage({ onNavigate }: StorePageProps = {}) {
+export function StorePage() {
   const { user } = useAuth();
   const { showToast } = useToast();
+  const { navigate } = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -115,7 +113,7 @@ export function StorePage({ onNavigate }: StorePageProps = {}) {
   const isInCart = (productId: string) => cartItems.some(item => item.product_id === productId);
 
   const handleViewCart = () => {
-    if (onNavigate) onNavigate('cart');
+    navigate('/cart');
   };
 
   const filteredProducts = products.filter(p => {

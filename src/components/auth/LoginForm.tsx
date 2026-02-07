@@ -1,14 +1,11 @@
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useRouter } from '../../lib/router';
 import { LogIn } from 'lucide-react';
 
-interface LoginFormProps {
-  onToggleForm: () => void;
-  onSuccess: () => void;
-}
-
-export function LoginForm({ onToggleForm, onSuccess }: LoginFormProps) {
+export function LoginForm() {
   const { signIn } = useAuth();
+  const { navigate } = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -25,7 +22,7 @@ export function LoginForm({ onToggleForm, onSuccess }: LoginFormProps) {
       setError(error.message);
       setLoading(false);
     } else {
-      onSuccess();
+      navigate('/dashboard');
     }
   };
 
@@ -78,7 +75,7 @@ export function LoginForm({ onToggleForm, onSuccess }: LoginFormProps) {
         Don't have an account?{' '}
         <button
           type="button"
-          onClick={onToggleForm}
+          onClick={() => navigate('/signup')}
           className="text-green-600 hover:text-green-700 font-medium"
         >
           Sign up

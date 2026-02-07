@@ -1,10 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ShoppingBag, ChevronLeft, ChevronRight } from 'lucide-react';
-
-interface HeroProps {
-  onGetStarted: () => void;
-  onVisitStore: () => void;
-}
+import { useRouter } from '../../lib/router';
 
 const slides = [
   {
@@ -29,7 +25,8 @@ const slides = [
   },
 ];
 
-export function Hero({ onGetStarted, onVisitStore }: HeroProps) {
+export function Hero() {
+  const { navigate } = useRouter();
   const [current, setCurrent] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -95,14 +92,14 @@ export function Hero({ onGetStarted, onVisitStore }: HeroProps) {
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <button
-                onClick={onVisitStore}
+                onClick={() => navigate('/store')}
                 className="px-6 sm:px-8 py-3 sm:py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
               >
                 <ShoppingBag className="w-5 h-5" />
                 Shop Affordable Eggs
               </button>
               <button
-                onClick={onGetStarted}
+                onClick={() => navigate('/our-story')}
                 className="px-6 sm:px-8 py-3 sm:py-4 bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 rounded-lg hover:bg-white/20 transition-all text-base sm:text-lg font-semibold"
               >
                 Learn How It Works

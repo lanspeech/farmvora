@@ -1,10 +1,9 @@
 import { ArrowRight, Egg } from 'lucide-react';
+import { useRouter } from '../../lib/router';
 
-interface CallToActionProps {
-  onGetStarted: () => void;
-}
+export function CallToAction() {
+  const { navigate } = useRouter();
 
-export function CallToAction({ onGetStarted }: CallToActionProps) {
   return (
     <div className="bg-gradient-to-br from-green-600 via-green-700 to-green-800 py-12 sm:py-16 md:py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -25,7 +24,7 @@ export function CallToAction({ onGetStarted }: CallToActionProps) {
 
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
           <button
-            onClick={onGetStarted}
+            onClick={() => navigate('/store')}
             className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-green-700 rounded-lg hover:bg-green-50 transition-colors text-base sm:text-lg font-semibold flex items-center justify-center gap-2 shadow-lg"
           >
             Shop Now
@@ -33,7 +32,7 @@ export function CallToAction({ onGetStarted }: CallToActionProps) {
           </button>
 
           <button
-            onClick={onGetStarted}
+            onClick={() => navigate('/our-story')}
             className="px-6 sm:px-8 py-3 sm:py-4 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white/10 transition-colors text-base sm:text-lg font-semibold"
           >
             Learn More

@@ -1,24 +1,16 @@
 import { Egg, Mail, MapPin, Phone } from 'lucide-react';
+import { Link } from '../lib/router';
 
-interface FooterProps {
-  onNavigate: (page: string) => void;
-}
-
-export function Footer({ onNavigate }: FooterProps) {
-  const handleNav = (page: string) => {
-    onNavigate(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
+export function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-8">
           <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
+            <Link to="/" className="flex items-center gap-2 mb-4">
               <Egg className="w-8 h-8 text-green-500" />
               <span className="text-xl font-bold">FarmVora</span>
-            </div>
+            </Link>
             <p className="text-gray-400 text-sm">
               Affordable eggs from community farms. Fighting malnutrition through sustainable,
               waste-to-feed-to-eggs production.
@@ -29,24 +21,24 @@ export function Footer({ onNavigate }: FooterProps) {
             <h3 className="font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <button onClick={() => handleNav('store')} className="hover:text-white transition-colors">
+                <Link to="/store" className="hover:text-white transition-colors">
                   Our Store
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => handleNav('our-story')} className="hover:text-white transition-colors">
+                <Link to="/our-story" className="hover:text-white transition-colors">
                   Our Story
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => handleNav('our-farms')} className="hover:text-white transition-colors">
+                <Link to="/our-farms" className="hover:text-white transition-colors">
                   Our Farms
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => handleNav('impact')} className="hover:text-white transition-colors">
+                <Link to="/impact" className="hover:text-white transition-colors">
                   Our Impact
-                </button>
+                </Link>
               </li>
             </ul>
           </div>
@@ -55,19 +47,19 @@ export function Footer({ onNavigate }: FooterProps) {
             <h3 className="font-semibold mb-4">Support</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <button onClick={() => handleNav('contact')} className="hover:text-white transition-colors">
+                <Link to="/contact" className="hover:text-white transition-colors">
                   Contact Us
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => handleNav('contact')} className="hover:text-white transition-colors">
+                <Link to="/contact" className="hover:text-white transition-colors">
                   Bulk Orders
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => handleNav('contact')} className="hover:text-white transition-colors">
+                <Link to="/contact" className="hover:text-white transition-colors">
                   Partnerships
-                </button>
+                </Link>
               </li>
             </ul>
           </div>

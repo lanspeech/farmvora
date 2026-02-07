@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../components/Toast';
+import { useRouter } from '../lib/router';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, MessageCircle } from 'lucide-react';
 
 interface Product {
@@ -21,13 +22,10 @@ interface CartItem {
   product: Product;
 }
 
-interface CartPageProps {
-  onNavigate: (page: string) => void;
-}
-
-export function CartPage({ onNavigate }: CartPageProps) {
+export function CartPage() {
   const { user, profile } = useAuth();
   const { showToast } = useToast();
+  const { navigate } = useRouter();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState<string | null>(null);
@@ -157,7 +155,7 @@ export function CartPage({ onNavigate }: CartPageProps) {
       window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
 
       showToast('Order placed! Complete payment via WhatsApp.');
-      onNavigate('dashboard');
+      navigate('/dashboard');
     } catch (error) {
       console.error('Error processing order:', error);
       showToast('Failed to process order. Please try again.', 'error');
@@ -172,7 +170,7 @@ export function CartPage({ onNavigate }: CartPageProps) {
         <div className="text-center">
           <ShoppingBag className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Sign in to view your cart</h2>
-          <button onClick={() => onNavigate('login')} className="text-green-600 hover:text-green-700 font-semibold">
+          <button onClick={() => navigate('/login')} className="text-green-600 hover:text-green-700 font-semibold">
             Sign In
           </button>
         </div>
@@ -196,7 +194,7 @@ export function CartPage({ onNavigate }: CartPageProps) {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <button onClick={() => onNavigate('store')} className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6">
+        <button onClick={() => navigate('/store')} className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6">
           <ArrowLeft className="w-5 h-5" />
           Continue Shopping
         </button>
@@ -208,7 +206,7 @@ export function CartPage({ onNavigate }: CartPageProps) {
             <ShoppingBag className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Your cart is empty</h2>
             <p className="text-gray-600 mb-6">Add some products from our store</p>
-            <button onClick={() => onNavigate('store')} className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold">
+            <button onClick={() => navigate('/store')} className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold">
               Browse Products
             </button>
           </div>

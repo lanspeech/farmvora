@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import { Mail, MapPin, Phone, Clock, Send, MessageSquare, Building2, Users, CheckCircle } from 'lucide-react';
 
-interface ContactPageProps {
-  onNavigate: (page: string) => void;
-}
-
-export function ContactPage({ onNavigate }: ContactPageProps) {
+export function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',

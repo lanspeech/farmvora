@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './components/Toast';
+import { RouterProvider, useRouter } from './lib/router';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { Hero } from './components/landing/Hero';
@@ -23,12 +23,7 @@ import { ContactPage } from './pages/ContactPage';
 
 function AppContent() {
   const { user, isAdmin, loading } = useAuth();
-  const [currentPage, setCurrentPage] = useState('home');
-
-  const handleNavigate = (page: string) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const { path } = useRouter();
 
   if (loading) {
     return (
@@ -43,93 +38,70 @@ function AppContent() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar onNavigate={handleNavigate} currentPage={currentPage} />
+      <Navbar />
 
       <main className="flex-1">
-        {currentPage === 'home' && (
+        {path === '/' && (
           <>
-            <Hero
-              onGetStarted={() => handleNavigate('store')}
-              onVisitStore={() => handleNavigate('store')}
-            />
-            <FeaturedProducts onVisitStore={() => handleNavigate('store')} />
+            <Hero />
+            <FeaturedProducts />
             <Stats />
             <WhyChooseUs />
             <HowItWorks />
             <AboutUs />
-            <CallToAction onGetStarted={() => handleNavigate('store')} />
+            <CallToAction />
           </>
         )}
 
-        {currentPage === 'store' && (
-          <StorePage onNavigate={handleNavigate} />
-        )}
+        {path === '/store' && <StorePage />}
 
-        {currentPage === 'cart' && (
-          <CartPage onNavigate={handleNavigate} />
-        )}
+        {path === '/cart' && <CartPage />}
 
-        {currentPage === 'dashboard' && user && (
-          <DashboardPage onNavigate={handleNavigate} />
-        )}
+        {path === '/dashboard' && user && <DashboardPage />}
 
-        {currentPage === 'our-story' && (
-          <OurStoryPage onNavigate={handleNavigate} />
-        )}
+        {path === '/our-story' && <OurStoryPage />}
 
-        {currentPage === 'our-farms' && (
-          <OurFarmsPage onNavigate={handleNavigate} />
-        )}
+        {path === '/our-farms' && <OurFarmsPage />}
 
-        {currentPage === 'impact' && (
-          <ImpactPage onNavigate={handleNavigate} />
-        )}
+        {path === '/impact' && <ImpactPage />}
 
-        {currentPage === 'contact' && (
-          <ContactPage onNavigate={handleNavigate} />
-        )}
+        {path === '/contact' && <ContactPage />}
 
-        {currentPage === 'login' && (
+        {path === '/login' && (
           <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 sm:py-12 px-4">
             <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-8">
               <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Welcome Back</h2>
-              <LoginForm
-                onToggleForm={() => handleNavigate('signup')}
-                onSuccess={() => handleNavigate('dashboard')}
-              />
+              <LoginForm />
             </div>
           </div>
         )}
 
-        {currentPage === 'signup' && (
+        {path === '/signup' && (
           <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8 sm:py-12 px-4">
             <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-8">
               <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Create Account</h2>
-              <SignupForm
-                onToggleForm={() => handleNavigate('login')}
-                onSuccess={() => handleNavigate('dashboard')}
-              />
+              <SignupForm />
             </div>
           </div>
         )}
 
-        {currentPage === 'admin' && user && isAdmin && (
-          <AdminDashboard />
-        )}
+        {path === '/admin' && user && isAdmin && <AdminDashboard />}
       </main>
 
-      <Footer onNavigate={handleNavigate} />
+      <Footer />
     </div>
   );
 }
 
 function App() {
   return (
-    <AuthProvider>
-      <ToastProvider>
-        <AppContent />
-      </ToastProvider>
-    </AuthProvider>
+    <RouterProvider>
+      <AuthProvider>
+        <ToastProvider>
+          <AppContent />
+        </ToastProvider>
+      </AuthProvider>
+    </RouterProvider>
   );
 }
 
